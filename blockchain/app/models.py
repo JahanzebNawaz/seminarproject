@@ -4,6 +4,15 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.base import Model
 
 
+class BaseModel(models.Model):
+
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
 class CustomUserManager(BaseUserManager):
     """
     Custom user model manager where email is the unique identifiers
@@ -56,7 +65,7 @@ class User(AbstractUser):
     age = models.PositiveIntegerField(default=18)
     gender = models.CharField(max_length=15, choices=GENDER, verbose_name='Gender')
     address = models.CharField(max_length=150, null=True, blank=True)
-    creadit_card = models.CharField(max_length=15, null=True, blank=True)
+    credit_card = models.CharField(max_length=15, null=True, blank=True)
     profile_image = models.ImageField(
                         upload_to=upload_profile,
                         default='Profiles/user/user.png',
@@ -79,14 +88,12 @@ class User(AbstractUser):
 
 
 
-class UserKyc(models.Model):
+class UserKyc(BaseModel):
+    id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_kyc', verbose_name='User')
     kyc_documents = models.FileField(upload_to='uploads/KYC/%Y/%m/%d/')
     is_approved = models.BooleanField(default=False)
     remarks = models.CharField(max_length=500, null=True, blank=True)
-
-    created_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'KYC Documents'
@@ -95,31 +102,28 @@ class UserKyc(models.Model):
         return self.user.username
 
 
-class Currencies(models.Model):
+class Currencies(BaseModel):
+    id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     currency = models.CharField(max_length=4, unique=True)
     total_amount = models.PositiveBigIntegerField(default=100000000)
     remaining_amount = models.PositiveBigIntegerField()
-
-    created_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
+    rate = models.DecimalField(max_digits=4, decimal_places=2)
 
     class Meta:
-        verbose_name = 'Wallet'
+        verbose_name = 'Currencies'
     
     def __str__(self) -> str:
-        return 
+        return '{}'.format(self.currency)
     
 
 
 
-class Wallet(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wallet', verbose_name='User')
+class Wallet(BaseModel):
+    id = models.BigAutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wallet_user', verbose_name='User')
     currency = models.ForeignKey(Currencies, on_delete=models.CASCADE, related_name='wallet_currency', verbose_name='Currency')
     balance = models.PositiveBigIntegerField(default=0)
-
-    created_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
 
 
     class Meta:
@@ -128,3 +132,82 @@ class Wallet(models.Model):
 
     def __str__(self) -> str:
         return '{} Wallet'.format(self.user.username)
+
+
+class Proposals(BaseModel):
+    id = models.BigAutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='proposals', verbose_name='User')
+    currency = models.CharField(max_length=4)
+    balance = models.PositiveBigIntegerField(default=0)
+    details = models.TextField(max_length=2000)
+    files = models.FileField(upload_to='uploads/proposals/%Y/%m/%d/')
+
+
+    class Meta:
+        verbose_name = 'Proposals'
+
+    def __str__(self) -> str:
+        return 'New Currency {} Proposals'.format(self.currency)
+
+
+
+class Tutorials(BaseModel):
+    id = models.BigAutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tutorial_user', verbose_name='User')
+    title = models.CharField(max_length=200)
+    details = models.TextField(max_length=2000, null=True)
+    url = models.URLField(max_length=250, null=True)
+
+    class Meta:
+        verbose_name = 'Tutorials'
+
+    def __str__(self) -> str:
+        return '{}'.format(self.title)
+
+
+
+class WatchList(BaseModel):
+    id = models.BigAutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='watch_list_user', verbose_name='User')
+    currency = models.ForeignKey(Currencies, on_delete=models.CASCADE, related_name='watch_list_currency', verbose_name='Currency')
+    name = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name = 'Watch List'
+
+    def __str__(self) -> str:
+        return '{}'.format(self.currency)
+
+
+
+class SellOrder(BaseModel):
+    id = models.BigAutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sell_order_user', verbose_name='User')
+    currency = models.ForeignKey(Currencies, on_delete=models.CASCADE, related_name='sell_order_amount', verbose_name='Currency')
+    amount = models.DecimalField(max_digits=4, decimal_places=2)
+    sell_rate = models.DecimalField(max_digits=4, decimal_places=2)
+
+    class Meta:
+        verbose_name = 'Sell Order'
+
+    def __str__(self) -> str:
+        return '{}'.format(self.currency)
+
+
+
+
+class Transactions(BaseModel):
+    id = models.BigAutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transaction_user', verbose_name='User')
+    currency = models.ForeignKey(Currencies, on_delete=models.CASCADE, related_name='transaction_currency', verbose_name='Currency')
+    amount = models.DecimalField(max_digits=4, decimal_places=2)
+    sell_rate = models.DecimalField(max_digits=4, decimal_places=2)
+    date = models.DateField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Transactions'
+
+    def __str__(self) -> str:
+        return '{}'.format(self.currency)
+
+
