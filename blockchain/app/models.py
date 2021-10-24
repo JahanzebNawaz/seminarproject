@@ -53,7 +53,6 @@ GENDER = [('Male', 'Male'), ('Female', "Female")]
  
 
 class User(AbstractUser):
-    # username 
     # first_name
     # last_name
     # password
@@ -96,10 +95,35 @@ class UserKyc(BaseModel):
     remarks = models.CharField(max_length=500, null=True, blank=True)
 
     class Meta:
-        verbose_name = 'KYC Documents'
+        verbose_name = 'KYC Document'
 
     def __str__(self) -> str:
         return self.user.username
+
+
+class Customer(BaseModel):
+    id = models.BigAutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='customer_user', verbose_name='User')
+    date_of_birth = models.DateField(blank=True, null=True)
+    phone_no = models.CharField(max_length=14)
+    age = models.PositiveIntegerField(default=18)
+    gender = models.CharField(max_length=15, choices=GENDER, verbose_name='Gender')
+    address = models.CharField(max_length=150, null=True, blank=True)
+    credit_card = models.CharField(max_length=15, null=True, blank=True)
+    profile_image = models.ImageField(
+                        upload_to=upload_profile,
+                        default='Profiles/user/user.png',
+                        null=True, blank=True
+    )
+
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        return self.user.username
+
+
 
 
 class Currencies(BaseModel):
@@ -111,7 +135,7 @@ class Currencies(BaseModel):
     rate = models.DecimalField(max_digits=4, decimal_places=2)
 
     class Meta:
-        verbose_name = 'Currencies'
+        verbose_name = 'Currencie'
     
     def __str__(self) -> str:
         return '{}'.format(self.currency)
@@ -144,7 +168,7 @@ class Proposals(BaseModel):
 
 
     class Meta:
-        verbose_name = 'Proposals'
+        verbose_name = 'Proposal'
 
     def __str__(self) -> str:
         return 'New Currency {} Proposals'.format(self.currency)
@@ -159,7 +183,7 @@ class Tutorials(BaseModel):
     url = models.URLField(max_length=250, null=True)
 
     class Meta:
-        verbose_name = 'Tutorials'
+        verbose_name = 'Tutorial'
 
     def __str__(self) -> str:
         return '{}'.format(self.title)
@@ -205,7 +229,7 @@ class Transactions(BaseModel):
     date = models.DateField(auto_now=True)
 
     class Meta:
-        verbose_name = 'Transactions'
+        verbose_name = 'Transaction'
 
     def __str__(self) -> str:
         return '{}'.format(self.currency)

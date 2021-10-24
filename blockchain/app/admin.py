@@ -10,7 +10,8 @@ from .models import (
     Tutorials,
     WatchList,
     SellOrder,
-    Transactions
+    Transactions,
+    Customer
 )
 
 User = get_user_model()
@@ -64,6 +65,12 @@ class KycAdmin(admin.ModelAdmin):
 @admin.register(Wallet)
 class WalletAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Wallet._meta.get_fields()]
+    search_fields = ('user__username',)
+
+
+@admin.register(Customer)
+class CustomerAdin(admin.ModelAdmin):
+    list_display = [field.name for field in Customer._meta.get_fields()]
     search_fields = ('user__username',)
 
 
