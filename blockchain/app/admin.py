@@ -27,7 +27,7 @@ admin.site.index_title = "Crypto Currency"
 class UserAdmin(UserAdmin):
     model = User
     list_display = ('email', 'is_staff', 'is_superuser', 'is_active',)
-    list_filter = ('email', 'is_staff', 'is_active',)
+    list_filter = ( 'is_staff', 'is_active', 'email',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('User Info', {

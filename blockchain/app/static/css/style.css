@@ -394,6 +394,25 @@ ol {
 	margin-bottom: 20px;
 }
 
+
+.hero-form-input  {
+	margin-top: 50px;
+	display: block;
+}
+
+.hero-form-input input {
+	width: 315px;
+	border: 1px solid #000000;
+	background: rgb(220, 220, 220);
+	height: 48px;
+	padding: 0 25px;
+	border-radius: 50px;
+	font-family: "Futura", sans-serif;
+	font-size: 16px;
+	margin-right: 8px;
+	margin-bottom: 20px;
+}
+
 /*---------------------
   About Section
 -----------------------*/
@@ -1817,4 +1836,14 @@ ol {
 	.comment .comment-content {
 		padding-left: 0;
 	}
+}
+
+
+.errorlist > li {
+	color: red !important;
+}
+
+
+.errorlist {
+	color: red !important;
 }

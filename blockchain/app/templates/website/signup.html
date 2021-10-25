@@ -1,0 +1,35 @@
+{% load static %}
+
+<!-- Hero section -->
+<section class="hero-section" style="height: auto; padding-bottom: 5rem;">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 hero-text">
+				<h2>Sign Up <span>Here</span> <br>for Crypto Trading</h2>
+				<!-- <h4>Use modern progressive technologies of Bitcoin to earn money</h4> -->
+				<form class="hero-subscribe-from" method="POST">
+					{% csrf_token %}
+					
+					{% for field in user_form %}
+					<div class="fieldWrapper">
+						<p class="text-danger">{{ field.errors }}</p>
+						<b>{{ field.label_tag }}</b> <br>
+						 {{ field }} <br>
+						{% if field.help_text %}
+							{{ field.help_text|safe }}
+						{% endif %}
+					</div>
+					{% endfor %}
+						
+					<!-- <input type="text" placeholder="Enter your email"> -->
+					<br>
+					<button class="site-btn sb-gradients">Sign Up</button>
+				</form>
+			</div>
+			<div class="col-md-6">
+				<img src="{% static 'img/laptop.png' %}" class="laptop-image" alt="">
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Hero section end -->

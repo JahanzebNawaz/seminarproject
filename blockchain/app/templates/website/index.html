@@ -34,29 +34,13 @@
 	<div id="preloder">
 		<div class="loader"></div>
 	</div>
-
-	<!-- Header section -->
-	<header class="header-section clearfix">
-		<div class="container-fluid">
-			<a href="index.html" class="site-logo">
-				<img src="{% static 'img/logo.png' %}" alt="">
-			</a>
-			<div class="responsive-bar"><i class="fa fa-bars"></i></div>
-			<a href="" class="user"><i class="fa fa-user"></i></a>
-			<a href="" class="site-btn">Sign Up Free</a>
-			<nav class="main-menu">
-				<ul class="menu-list">
-					<li><a href="">Solution</a></li>
-					<li><a href="">Features</a></li>
-					<li><a href="">News</a></li>
-					<li><a href="">About</a></li>
-					<li><a href="">Contact</a></li>
-				</ul>
-			</nav>
-		</div>
-	</header>
-	<!-- Header section end -->
-
+	
+	
+	{% if messages %}
+		{% include './alert.html' %}
+	{% endif %}
+		
+	{% include './navbar.html' %}
 
 	<!-- Hero section -->
 	<section class="hero-section">
@@ -65,10 +49,12 @@
 				<div class="col-md-6 hero-text">
 					<h2>Invest in <span>Bitcoin</span> <br>Bitcoin Trading</h2>
 					<h4>Use modern progressive technologies of Bitcoin to earn money</h4>
-					<form class="hero-subscribe-from">
+					<!-- <form class="hero-subscribe-from">
 						<input type="text" placeholder="Enter your email">
-						<button class="site-btn sb-gradients">Get Started</button>
-					</form>
+					</form> -->
+					<br>
+					<!-- <button class="site-btn sb-gradients">Get Started</button> -->
+					<a href="{% url 'website:signup' %}" class="site-btn sb-gradients">Get Started</a>
 				</div>
 				<div class="col-md-6">
 					<img src="{% static 'img/laptop.png' %}" class="laptop-image" alt="">
@@ -565,5 +551,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
 	<script src="{% static 'js/main.js' %}"></script>
+
+	{% include './jscode.html' %}
+
+	
 </body>
 </html>

@@ -1,0 +1,37 @@
+{% extends './dashboard.html' %}
+{% load static %}
+
+{% block body %}
+
+<!-- About section -->
+<section class="about-section spad">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-10 about-text">
+				<h3><u>{{user.username.upper}} Profile</u></h3>
+
+				<form action="" class="hero-form-input "  method="post">
+					{% csrf_token %}
+
+					<div class="row">
+						<div class="col-lg-6">
+							<input type="text">
+						</div>
+						<div class="col-lg-6">
+							<input type="text">
+						</div>
+					</div>
+					
+						
+				</form>
+			</div>
+		</div>
+		<!-- <div class="about-img">
+			<img src="{% static 'img/about-img.png' %}" alt="">
+		</div> -->
+	</div>
+</section>
+<!-- About section end -->
+
+{% endblock body %}
+	

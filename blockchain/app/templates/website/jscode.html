@@ -1,0 +1,14 @@
+<script>
+
+$(".close").click(function() {
+  $(this)
+    .parent(".alert")
+    .fadeOut();
+});
+
+setTimeout(function(){
+    // document.getElementsByClassName('alert').style.opacity = '0';
+    $(".alert").css('opacity', 0);
+}, 3500);
+
+</script>

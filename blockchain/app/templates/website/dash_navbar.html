@@ -1,0 +1,30 @@
+{% load static %}
+
+	<!-- Header section -->
+	<header class="header-section clearfix">
+		<div class="container-fluid">
+			<a href="/" class="site-logo">
+				<img src="{% static 'img/logo.png' %}" alt="">
+			</a>
+			<div class="responsive-bar"><i class="fa fa-bars"></i></div>
+			<a href="" class="user"><i class="fa fa-user"></i></a>
+            
+            {% if user.is_authenticated %}
+			<a href="{% url 'website:logout' %}" class="site-btn">Logout</a>
+            {% else %}
+			<a href="{% url 'website:login' %}" class="site-btn">Login</a>
+            {% endif %}
+                
+
+			<nav class="main-menu">
+				<ul class="menu-list">
+					<li><a href="">Solution</a></li>
+					<li><a href="">Features</a></li>
+					<li><a href="">News</a></li>
+					<li><a href="">About</a></li>
+					<li><a href="{% url 'website:profile' %}">Profile</a></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+	<!-- Header section end -->
