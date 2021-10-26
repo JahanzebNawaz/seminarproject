@@ -1,12 +1,15 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth import authenticate, get_user, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.views import View
-from .forms import SignUpForm, UserProfileForm
-from django.contrib.auth.models import User, auth
+from .forms import SignUpForm, UserProfileForm, UserPassChangeForm
+from django.contrib.auth.models import auth
+from django.contrib.auth import get_user_model
+from django.forms.models import model_to_dict
 
+User = get_user_model()
 
 
 class Index(View):
@@ -84,13 +87,35 @@ def dashboard(request):
 
 def profile(request, pk=None):
     template_name = 'website/profile.html'
+    try:
+        instance = get_user_id(request)
+        user = get_object_or_404(User, pk=instance)
+        user_data = model_to_dict(user)
+        print(user_data['is_superuser'])
+    except Exception as e:
+        messages.info(request, f'Error: {str(e)}')
+        return redirect('website:index')
+
+    form = UserProfileForm(initial=user_data)
     context = {
-        'form': UserProfileForm,
+        'form': form,
     }
 
     if request.GET:
         pk = get_user_id(request)
         user = User.objects.get(pk=pk)
         context['user'] = user
-    
+
+    if request.POST:
+        pk = get_user_id(request)
+        user = User.objects.get(pk=pk)
+        form = UserProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.is_active = True
+            obj.is_superuser = user_data['is_superuser']
+            obj.save()
+            messages.success(request, 'Successfully details updated!')
+            return redirect('website:profile')
+        print(form.errors)
     return render(request, template_name, context)

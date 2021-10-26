@@ -1,5 +1,12 @@
 {% load static %}
 
+
+{% if not user.is_authenticated %}
+	<script>
+		window.location.replace('/')
+	</script>
+{% endif %}
+	
 	<!-- Header section -->
 	<header class="header-section clearfix">
 		<div class="container-fluid">

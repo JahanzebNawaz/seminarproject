@@ -2,6 +2,9 @@ from django.db import models  # noqa: F401
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db.models.base import Model
+from django.core.validators import RegexValidator
+from datetime import date, datetime
+from django.core.exceptions import ValidationError
 
 
 class BaseModel(models.Model):
@@ -52,6 +55,7 @@ def upload_profile(instance, filename):
 GENDER = [('Male', 'Male'), ('Female', "Female")]
  
 
+
 class User(AbstractUser):
     # first_name
     # last_name
@@ -59,12 +63,6 @@ class User(AbstractUser):
     # password2
     id = models.BigAutoField(primary_key=True)
     email = models.EmailField(unique=True)
-    date_of_birth = models.DateField(blank=True, null=True)
-    phone_no = models.CharField(max_length=14)
-    age = models.PositiveIntegerField(default=18)
-    gender = models.CharField(max_length=15, choices=GENDER, verbose_name='Gender')
-    address = models.CharField(max_length=150, null=True, blank=True)
-    credit_card = models.CharField(max_length=15, null=True, blank=True)
     profile_image = models.ImageField(
                         upload_to=upload_profile,
                         default='Profiles/user/user.png',
@@ -104,17 +102,20 @@ class UserKyc(BaseModel):
 class Customer(BaseModel):
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='customer_user', verbose_name='User')
-    date_of_birth = models.DateField(blank=True, null=True)
-    phone_no = models.CharField(max_length=14)
+    date_of_birth = models.DateField(default='2000-01-01')
+    phoneNumberRegex = RegexValidator(regex = r"^\+?46?\d{8,15}$")
+    phone_no = models.CharField(validators = [phoneNumberRegex], max_length = 14)
     age = models.PositiveIntegerField(default=18)
     gender = models.CharField(max_length=15, choices=GENDER, verbose_name='Gender')
     address = models.CharField(max_length=150, null=True, blank=True)
-    credit_card = models.CharField(max_length=15, null=True, blank=True)
-    profile_image = models.ImageField(
-                        upload_to=upload_profile,
-                        default='Profiles/user/user.png',
-                        null=True, blank=True
-    )
+    credit_card = models.CharField(max_length=14, null=True, blank=True)
+    is_verified = models.BooleanField(default=False)
+    
+    # profile_image = models.ImageField(
+    #                     upload_to=upload_profile,
+    #                     default='Profiles/user/user.png',
+    #                     null=True, blank=True
+    # )
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -122,7 +123,6 @@ class Customer(BaseModel):
 
     def __str__(self):
         return self.user.username
-
 
 
 

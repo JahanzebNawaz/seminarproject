@@ -1,9 +1,12 @@
 # from django.contrib.auth import forms
 # from django.contrib.auth import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, SetPasswordForm, PasswordChangeForm
 from django.contrib.auth import get_user_model
 from django import forms
 from django.forms import fields
+from .models import Customer
+from datetime import datetime
+
 
 User = get_user_model()
 
@@ -21,8 +24,31 @@ class SignUpForm(UserCreationForm):
         fields = ('username','email', 'password1', 'password2',) #etc etc, other fields you want displayed on the form)
 
 
+class UserPassChangeForm(PasswordChangeForm):
+    pass
+    # class Meta:
+    #     model = User #this is the "YourCustomUser" that you imported at the top of the file  
+    #     fields = '__all__'  #('username','email', 'password1', 'password2',) #etc etc, other fields you want displayed on the form)
+
+
 class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
         fields = '__all__'
+        exclude = ['date_joined', 'password']
+
+
+class CustomerForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = '__all__'
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        date_of_birth = cleaned_data.get('date_of_birth')
+        year = datetime.today().year
+        age = year - date_of_birth.year
+        if age < 18:
+            raise forms.ValidationError(u"Please check your DOB, under 18 restricted!")
+        return cleaned_data

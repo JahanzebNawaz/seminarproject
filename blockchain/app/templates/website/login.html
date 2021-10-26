@@ -10,9 +10,12 @@
 				<!-- <h4>Use modern progressive technologies of Bitcoin to earn money</h4> -->
 				<form class="hero-subscribe-from" method="POST">
 					{% csrf_token %}
-
-					<input type="email" name="email" id="" required>
-					<input type="password" name="password" id="" required>
+					
+					<label for="email">Email</label> <br>
+					<input type="email" name="email" id="email" required>
+					<br>
+					<label for="password">Password</label> <br>
+					<input type="password" name="password" id="password" required>
 					
 					<!-- {% for field in form %}
 					<div class="fieldWrapper">

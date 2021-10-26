@@ -8,10 +8,85 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-10 about-text">
-				<h3><u>{{user.username.upper}} Profile</u></h3>
+				<div class="widget-area">
+					<h4 class="widget-title">{{user.username.upper}} PROFILE</h4>
+					<hr>
+					<p>Logged In user profile, Make changes and submit the form for updates.</p>
+					<form class="widget-subscribe-from" method="POST" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="row">
+							<div class="col-12">
+								<p class="text-danger">{{ form.username.errors }}</p>
+								<p class="text-danger">{{ form.email.errors }}</p>
+								<!-- {% if form.username.help_text %}
+									{{ form.username.help_text|safe }}
+								{% endif %} -->
+							</div>
+							<div class="col-6">
+								<!-- <input type="text" placeholder="Enter your email"> -->
+								<b>{{ form.username.label_tag }}</b>
+								{{ form.username }}
+							</div>
+							<div class="col-6">
+								<b>{{ form.email.label_tag }}</b>
+								{{ form.email }}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<p class="text-danger">{{ form.first_name.errors }}</p>
+								<p class="text-danger">{{ form.last_name.errors }}</p>
+								<!-- {% if form.username.help_text %}
+									{{ form.username.help_text|safe }}
+								{% endif %} -->
+							</div>
+							<div class="col-6">
+								<!-- <input type="text" placeholder="Enter your email"> -->
+								<b>{{ form.first_name.label_tag }}</b>
+								{{ form.first_name }}
+							</div>
+							<div class="col-6">
+								<b>{{ form.last_name.label_tag }}</b>
+								{{ form.last_name }}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<b>{{ form.profile_image.label_tag }}</b>
+								{{ form.profile_image }}
+							</div>
+						</div>
 
+						<div class="row">
+							<div class="col-12">
+								<b>{{ form.password.label_tag }}</b>
+								{{ form.password }}
+							</div>
+						</div>
+						<!-- <div class="row">
+							<div class="col-12">
+								<p class="text-danger">{{ form.first_name.errors }}</p>
+								<p class="text-danger">{{ form.last_name.errors }}</p>
+							</div>
+							<div class="col-6">
+								<b>{{ form.first_name.label_tag }}</b>
+								{{ form.first_name }}
+							</div>
+							<div class="col-6">
+								<b>{{ form.last_name.label_tag }}</b>
+								{{ form.last_name }}
+							</div>
+						</div> -->
+						<button class="site-btn sb-full-- sb-gradients">Update</button>
+					</form>
+				</div>
+
+
+				<!-- {{userform}} -->
+				<!-- <h3><u>{{user.username.upper}} Profile</u></h3> -->
+				
+<!-- 
 				<form action="" class="hero-form-input "  method="post">
-					{% csrf_token %}
 
 					<div class="row">
 						<div class="col-lg-6">
@@ -23,7 +98,8 @@
 					</div>
 					
 						
-				</form>
+				</form> -->
+
 			</div>
 		</div>
 		<!-- <div class="about-img">

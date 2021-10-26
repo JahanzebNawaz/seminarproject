@@ -14,6 +14,8 @@ from .models import (
     Customer
 )
 
+from .forms import CustomerForm
+
 User = get_user_model()
 # Register your models here.
 
@@ -26,15 +28,15 @@ admin.site.index_title = "Crypto Currency"
 
 class UserAdmin(UserAdmin):
     model = User
-    list_display = ('email', 'is_staff', 'is_superuser', 'is_active',)
+    list_display = ('email', 'username', 'is_verified', 'is_active',)
     list_filter = ( 'is_staff', 'is_active', 'email',)
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('email', 'username', 'password')}),
         ('User Info', {
             'classes': ('wide',),
-            'fields': ('first_name', 'last_name', 'profile_image')
+            'fields': ('first_name', 'last_name', 'profile_image'),
         }),
-        ('Permissions', {'fields': ('is_staff', 'is_superuser', 'is_active')}),
+        ('Permissions', {'fields': ('is_verified', 'is_staff', 'is_superuser', 'is_active')}),
     )
     add_fieldsets = (
         (None, {
@@ -69,9 +71,11 @@ class WalletAdmin(admin.ModelAdmin):
 
 
 @admin.register(Customer)
-class CustomerAdin(admin.ModelAdmin):
+class CustomerAdmin(admin.ModelAdmin):
+    form = CustomerForm
     list_display = [field.name for field in Customer._meta.get_fields()]
     search_fields = ('user__username',)
+    exclude = ['age']
 
 
 @admin.register(Currencies)
