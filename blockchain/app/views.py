@@ -114,6 +114,7 @@ def profile(request, pk=None):
             obj = form.save(commit=False)
             obj.is_active = True
             obj.is_superuser = user_data['is_superuser']
+            obj.is_staff = user_data['is_staff']
             obj.save()
             messages.success(request, 'Successfully details updated!')
             return redirect('website:profile')
