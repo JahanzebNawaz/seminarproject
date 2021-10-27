@@ -1858,3 +1858,7 @@ textarea {
     padding: 15px 20px !important;
     font-size: 14px !important;
 }
+
+.greenicon {
+	color: green !important;
+}

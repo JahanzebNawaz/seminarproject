@@ -9,63 +9,60 @@
 		<div class="row">
 			<div class="col-lg-12 about-text">
 				<div class="widget-area">
-					<h4 class="widget-title">{{user.username.upper}} PROFILE 
-
-										{% if user.is_verified %}
-										<span style="color: green;">Verified</span>
-										{% else %}
-										<span style="color: red;">Not Verified</span>
-										{% endif %}
-
-					</h4>
+					<h4 class="widget-title">{{user.username.upper}} PROFILE</h4>
 					<hr>
 					<p>Logged In user profile, Make changes and submit the form for updates.</p>
 					<form class="widget-subscribe-from" method="POST" enctype="multipart/form-data">
 						{% csrf_token %}
 						<div class="row">
 							<div class="col-12">
-								<p class="text-danger">{{ form.date_of_birth.errors }}</p>
-								<p class="text-danger">{{ form.phone_no.errors }}</p>
+								<p class="text-danger">{{ form.username.errors }}</p>
+								<p class="text-danger">{{ form.email.errors }}</p>
 								<!-- {% if form.username.help_text %}
 									{{ form.username.help_text|safe }}
 								{% endif %} -->
 							</div>
 							<div class="col-6">
 								<!-- <input type="text" placeholder="Enter your email"> -->
-								<b>{{ form.date_of_birth.label_tag }}</b>
-								{{ form.date_of_birth }}
+								<b>{{ form.username.label_tag }}</b>
+								{{ form.username }}
 							</div>
 							<div class="col-6">
-								<b>{{ form.phone_no.label_tag }}</b>
-								{{ form.phone_no }}
+								<b>{{ form.email.label_tag }}</b>
+								{{ form.email }}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-12">
-								<p class="text-danger">{{ form.gender.errors }}</p>
-								<p class="text-danger">{{ form.address.errors }}</p>
+								<p class="text-danger">{{ form.first_name.errors }}</p>
+								<p class="text-danger">{{ form.last_name.errors }}</p>
 								<!-- {% if form.username.help_text %}
 									{{ form.username.help_text|safe }}
 								{% endif %} -->
 							</div>
 							<div class="col-6">
 								<!-- <input type="text" placeholder="Enter your email"> -->
-								<b>{{ form.gender.label_tag }}</b>
-								{{ form.gender }}
+								<b>{{ form.first_name.label_tag }}</b>
+								{{ form.first_name }}
 							</div>
 							<div class="col-6">
-								<b>{{ form.address.label_tag }}</b>
-								{{ form.address }}
+								<b>{{ form.last_name.label_tag }}</b>
+								{{ form.last_name }}
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-12">
-								<b>{{ form.credit_card.label_tag }}</b>
-								{{ form.credit_card }}
+								<b>{{ form.profile_image.label_tag }}</b>
+								{{ form.profile_image }}
 							</div>
 						</div>
 
-						
+						<div class="row">
+							<div class="col-12">
+								<b>{{ form.password.label_tag }}</b>
+								{{ form.password }}
+							</div>
+						</div>
 						<!-- <div class="row">
 							<div class="col-12">
 								<p class="text-danger">{{ form.first_name.errors }}</p>

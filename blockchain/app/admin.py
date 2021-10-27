@@ -78,9 +78,11 @@ class CustomerAdmin(admin.ModelAdmin):
     exclude = ['age']
 
 
+
 @admin.register(Currencies)
 class CurriencyAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Currencies._meta.get_fields()]
+    # list_display = [field.name for field in Currencies._meta.get_fields()]
+    list_display = ['currency', 'total_amount', 'remaining_amount', 'rate']
     search_fields = ('user__username',)
 
 

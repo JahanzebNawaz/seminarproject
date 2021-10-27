@@ -109,7 +109,8 @@ class Customer(BaseModel):
     age = models.PositiveIntegerField(default=18)
     gender = models.CharField(max_length=15, choices=GENDER, verbose_name='Gender')
     address = models.CharField(max_length=150, null=True, blank=True)
-    credit_card = models.CharField(max_length=14, null=True, blank=True)
+    cardNumber = RegexValidator(regex = r"^[0-9]{14}$")
+    credit_card = models.CharField(max_length=14, validators=[cardNumber],  null=True, blank=True)
     is_verified = models.BooleanField(default=False)
     
     # profile_image = models.ImageField(
@@ -129,7 +130,7 @@ class Customer(BaseModel):
 
 class Currencies(BaseModel):
     id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_currency')
     currency = models.CharField(max_length=4, unique=True)
     total_amount = models.PositiveBigIntegerField(default=100000000)
     remaining_amount = models.PositiveBigIntegerField()
@@ -181,10 +182,18 @@ class Tutorials(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tutorial_user', verbose_name='User')
     title = models.CharField(max_length=200)
     details = models.TextField(max_length=2000, null=True)
+    cover = models.ImageField(
+                        upload_to='covers/%Y/%m/%d/',
+                        default='covers/cover.jpg',
+                        null=True, blank=True
+    )
     url = models.URLField(max_length=250, null=True)
 
     class Meta:
         verbose_name = 'Tutorial'
+
+    def short_details(self):
+        return self.details[:-30]
 
     def __str__(self) -> str:
         return '{}'.format(self.title)
@@ -195,7 +204,7 @@ class WatchList(BaseModel):
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='watch_list_user', verbose_name='User')
     currency = models.ForeignKey(Currencies, on_delete=models.CASCADE, related_name='watch_list_currency', verbose_name='Currency')
-    name = models.CharField(max_length=200)
+    # name = models.CharField(max_length=200)
 
     class Meta:
         verbose_name = 'Watch List'
