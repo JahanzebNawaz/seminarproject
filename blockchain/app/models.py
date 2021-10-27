@@ -88,9 +88,10 @@ class User(AbstractUser):
 class UserKyc(BaseModel):
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_kyc', verbose_name='User')
-    kyc_documents = models.FileField(upload_to='uploads/KYC/%Y/%m/%d/')
-    is_approved = models.BooleanField(default=False)
+    kyc_documents = models.FileField(upload_to='uploads/KYC/%Y/%m/%d/',)
+    is_approved = models.BooleanField(default=False, null=True, blank=True)
     remarks = models.CharField(max_length=500, null=True, blank=True)
+    comments = models.CharField(max_length=500, null=True, blank=True)
 
     class Meta:
         verbose_name = 'KYC Document'
@@ -161,10 +162,10 @@ class Wallet(BaseModel):
 class Proposals(BaseModel):
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='proposals', verbose_name='User')
-    currency = models.CharField(max_length=4)
-    balance = models.PositiveBigIntegerField(default=0)
-    details = models.TextField(max_length=2000)
-    files = models.FileField(upload_to='uploads/proposals/%Y/%m/%d/')
+    currency = models.CharField(max_length=4, verbose_name='Currency Name', help_text='Max limit is 4 (Alphabets, Digits)')
+    balance = models.PositiveBigIntegerField(default=0, verbose_name='Total Balance', help_text='max amount 100 000 000')
+    details = models.TextField(max_length=2000, null=True, blank=True )
+    files = models.FileField(upload_to='uploads/proposals/%Y/%m/%d/', default='')
 
 
     class Meta:

@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, SetPasswordForm, Passwor
 from django.contrib.auth import get_user_model
 from django import forms
 from django.forms import fields
-from .models import Customer
+from .models import Customer, UserKyc, Proposals
 from datetime import datetime
 
 
@@ -23,12 +23,6 @@ class SignUpForm(UserCreationForm):
         model = User #this is the "YourCustomUser" that you imported at the top of the file  
         fields = ('username','email', 'password1', 'password2',) #etc etc, other fields you want displayed on the form)
 
-
-class UserPassChangeForm(PasswordChangeForm):
-    pass
-    # class Meta:
-    #     model = User #this is the "YourCustomUser" that you imported at the top of the file  
-    #     fields = '__all__'  #('username','email', 'password1', 'password2',) #etc etc, other fields you want displayed on the form)
 
 
 class UserProfileForm(forms.ModelForm):
@@ -52,3 +46,20 @@ class CustomerForm(forms.ModelForm):
         if age < 18:
             raise forms.ValidationError(u"Please check your DOB, under 18 restricted!")
         return cleaned_data
+
+
+class UserKycForm(forms.ModelForm):
+
+    class Meta:
+        model = UserKyc
+        # fields = '__all__'
+        fields = ('kyc_documents',)
+
+
+class ProposalForm(forms.ModelForm):
+    details =  forms.CharField(widget=forms.Textarea(attrs={"rows":5, "cols":100}))
+
+    class Meta:
+        model = Proposals
+        fields = '__all__'
+        exclude = ['user',]

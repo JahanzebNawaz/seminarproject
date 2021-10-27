@@ -45,6 +45,8 @@
 		{% include './signup.html' %}
 	{% elif request.path == '/login/' %}
 		{% include './login.html' %}
+	{% elif request.path == '/proposal/' %}
+		{% include './proposal.html' %}
 	{% else %}
 		{% include './hero_section.html' %}
 	{% endif %}

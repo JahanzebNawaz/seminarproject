@@ -1,0 +1,103 @@
+{% extends './dashboard.html' %}
+{% load static %}
+
+{% block body %}
+
+<!-- About section -->
+<section class="about-section spad">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 about-text">
+				<div class="widget-area">
+					<h4 class="widget-title">SUBMIT {{user.username.upper}} KYC DOCUMENTS</h4>
+					<hr>
+					<p>Your KYC Documents are Important, create a PDF file of following documents to upload.</p>
+					<p>
+						<ul style="margin-left: 30px;">
+							<li>Passport</li>
+							<li>ID Card</li>
+							<li>Utility Bill</li>
+							<li>Driving License (optional)</li>
+						</ul>
+					</p>
+					<form action="" class="widget-subscribe-from" method="POST" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="row">
+							<div class="col-12">
+								<p class="text-danger">{{ form.kyc_documents.errors }}</p>
+								<!-- {% if form.username.help_text %}
+									{{ form.username.help_text|safe }}
+								{% endif %} -->
+							</div>
+							
+							{% if not kyc %}
+								<div class="col-12">
+									<!-- <input type="text" placeholder="Enter your email"> -->
+									<b>{{ form.kyc_documents.label_tag }}</b>
+									{{ form.kyc_documents }}
+								</div>
+								
+							{% endif %}
+
+							<div class="col-12">
+								{% if kyc %}
+									<h3>
+										Approval:
+										{% if kyc.is_approved %}
+										<span style="color: green;">{{kyc.is_approved}}</span>
+										{% else %}
+										<span style="color: red;">{{kyc.is_approved}}</span>
+										{% endif %}
+									</h3>
+										
+								{% endif %}
+							</div>
+							
+						</div>
+						{% if kyc %}
+						<div class="row">
+							<div class="col-12">
+								<label for=""> Comments: </label>
+								{{ kyc.comments }}
+							</div>
+						</div>
+						
+						{% endif %}
+
+
+
+
+						<!-- <div class="row">
+							<div class="col-2">
+								 
+								<label for=""> Verified:  {{ form.is_approved }} </label>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-12">
+								<b>{{ form.comments.label_tag }}</b>
+								{{ form.comments }}
+							</div>
+						</div> -->
+
+						<!-- <div class="row">
+							<div class="col-12">
+								<b>{{ form.comments.label_tag }}</b>
+								{{ form.comments }}
+							</div>
+						</div> -->
+						
+						<button class="site-btn sb-full-- sb-gradients">Submit</button>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+</section>
+<!-- About section end -->
+
+{% endblock body %}
+	

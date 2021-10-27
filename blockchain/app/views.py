@@ -4,10 +4,11 @@ from django.contrib.auth import authenticate, get_user, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.views import View
-from .forms import SignUpForm, UserProfileForm, UserPassChangeForm
+from .forms import SignUpForm, UserProfileForm, UserKycForm, ProposalForm
 from django.contrib.auth.models import auth
 from django.contrib.auth import get_user_model
 from django.forms.models import model_to_dict
+from .models import UserKyc
 
 User = get_user_model()
 
@@ -91,7 +92,6 @@ def profile(request, pk=None):
         instance = get_user_id(request)
         user = get_object_or_404(User, pk=instance)
         user_data = model_to_dict(user)
-        print(user_data['is_superuser'])
     except Exception as e:
         messages.info(request, f'Error: {str(e)}')
         return redirect('website:index')
@@ -118,5 +118,111 @@ def profile(request, pk=None):
             obj.save()
             messages.success(request, 'Successfully details updated!')
             return redirect('website:profile')
+    return render(request, template_name, context)
+
+
+
+
+def userkyc(request, pk=None):
+    template_name = 'website/kycdocs.html'
+    try:
+        instance = get_user_id(request)
+        user = get_object_or_404(User, pk=instance)
+        # user_data = model_to_dict(user)
+        kyc = UserKyc.objects.filter(user=user).last()
+        
+
+    except Exception as e:
+        messages.info(request, f'Error: {str(e)}')
+        return redirect('website:index')
+
+    form = UserKycForm()
+    context = {
+        'form': form,
+    }
+
+    if kyc:
+        context['kyc'] = kyc
+
+    if request.GET:
+        pk = get_user_id(request)
+        user = User.objects.get(pk=pk)
+        
+        context['user'] = user
+    
+    if request.POST:
+        pk = get_user_id(request)
+        user = User.objects.get(pk=pk)
+        print(user)
+        print(request.POST.get('kyc_documents'))
+
+        form_data = UserKycForm(request.POST, request.FILES, instance=user)
+        if form_data.is_valid():
+            # obj = form.save(commit=False)
+            form_data.save()
+            messages.success(request, 'Successfully KYC Documents Submmited!')
+            return redirect('website:userkyc')
         print(form.errors)
     return render(request, template_name, context)
+
+
+
+class UserKycView(View):
+    # base instead of signup. singup is included in base with if condition.
+    template_name = 'website/kycdocs.html'
+    form_class = UserKycForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        kyc_data = UserKyc.objects.filter(user=request.user.id).last()
+        print(kyc_data)
+        context = {
+            'form': form,
+            'kyc': kyc_data,
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        user = get_object_or_404(User, pk=request.user.id)
+        form = self.form_class(request.POST, request.FILES)
+        form.instance.user = request.user
+        context = {
+            'form': form
+        }
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user = user
+            obj.save()
+            messages.success(request, 'Successfully submitted!')
+            return redirect('website:userkyc')
+        messages.error(request, f'{form.errors}')
+        return render(request, self.template_name, context)
+
+
+class ProposalView(View):
+    # base instead of signup. singup is included in base with if condition.
+    template_name = 'website/base.html'
+    form_class = ProposalForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        context = {
+            'form': form
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        user = get_object_or_404(User, pk=request.user.id)
+        form = self.form_class(request.POST, request.FILES)
+        form.instance.user = request.user
+        context = {
+            'form': form
+        }
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user = user
+            obj.save()
+            messages.success(request, 'Successfully submitted!')
+            return redirect('website:proposal')
+        messages.error(request, f'{form.errors}')
+        return render(request, self.template_name, context)

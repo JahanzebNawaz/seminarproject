@@ -1,0 +1,89 @@
+{% load static %}
+
+<!-- Hero section -->
+<section class="hero-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 hero-text">
+				<h2>Invest in <span>Bitcoin</span> <br>Bitcoin Trading</h2>
+				<h4>Use modern progressive technologies of Bitcoin to earn money</h4>
+				<h2>Submit Your Proposal</h2>
+				<form class="hero-subscribe-from">
+					<!-- <input type="text" placeholder="Enter your email"> -->
+					<!-- <button class="site-btn sb-gradients">Get Started</button> -->
+				</form>
+			</div>
+			<div class="col-md-6">
+				<img src="{% static 'img/laptop.png' %}" class="laptop-image" alt="">
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Hero section end -->
+
+
+
+<!-- About section -->
+<section class="about-section spad">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12 about-text">
+				<div class="widget-area">
+					<h4 class="widget-title">SUBMIT PROPOSAL</h4>
+					<hr>
+					<p>You can submit proposal for your currency listing. please add all the required details in PDF file and upload it.</p>
+					<form class="widget-subscribe-from" method="POST" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="row">
+							<div class="col-12">
+								<p class="text-danger">{{ form.currency.errors }}</p>
+								<p class="text-danger">{{ form.balance.errors }}</p>
+								
+							</div>
+							<div class="col-6">
+								<!-- <input type="text" placeholder="Enter your email"> -->
+								<b>{{ form.currency.label_tag }}</b>
+								{% if form.currency.help_text %}
+									{{ form.currency.help_text|safe }}
+								{% endif %}
+								{{ form.currency }}
+							</div>
+							<div class="col-6">
+								<b>{{ form.balance.label_tag }}</b>
+								{% if form.balance.help_text %}
+									{{ form.balance.help_text|safe }}
+								{% endif %}
+								{{ form.balance }}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<b>{{ form.files.label_tag }}</b>
+								{% if form.files.help_text %}
+									{{ form.files.help_text|safe }}
+								{% endif %}
+								<br>
+								{{ form.files }}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<b>{{ form.details.label_tag }}</b>
+								{% if form.details.help_text %}
+									{{ form.details.help_text|safe }}
+								{% endif %}
+								<br>
+								{{ form.details }}
+							</div>
+						</div>
+						<button class="site-btn sb-full-- sb-gradients">Submit</button>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+</section>
+<!-- About section end -->
+
