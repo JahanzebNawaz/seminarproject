@@ -27,10 +27,9 @@
 						  <td>{{crypto.currency}}</td>
 						  <td>{{crypto.currency.remaining_amount}}</td>
 						  <td>
-							  A
-							  <!-- <a href="{% url 'website:add_to_watch' crypto.pk %}" style="color:green;">
-								Like
-							</a> -->
+							  <a href="{% url 'website:purchase' crypto.currency.pk %}" style="color:green;">
+								Buy
+							</a>
 						  </td>
 						</tr>
 						{% endfor %}

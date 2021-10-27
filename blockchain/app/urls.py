@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
 from .views import (
-    Index, SignUp, UserLogin, UserLogout, dashboard, profile, about, blog_detail, contact, add_to_watch,watchlist,
+    Index, SignUp, UserLogin, UserLogout, dashboard, profile, about, blog_detail, contact, 
+    add_to_watch,watchlist, purchase,
      ProposalView, UserKycView, AccountView, ProfileView, BlogsView, CurrenciesView
     )
 
@@ -28,5 +29,7 @@ urlpatterns = [
     path('crypto/', CurrenciesView.as_view(), name='cryptos'),
     path('add/watch/list/<int:pk>/', add_to_watch, name='add_to_watch'),
     path('watch/list/', watchlist, name='watchlist'),
+    path('purchase/<int:pk>/', purchase, name='purchase'),
+    # path('purchase/<int:pk>/', PurchaseView.as_view(), name='purchase'),
 ]
 

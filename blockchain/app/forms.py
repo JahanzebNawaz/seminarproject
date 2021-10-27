@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, SetPasswordForm, Passwor
 from django.contrib.auth import get_user_model
 from django import forms
 from django.forms import fields
-from .models import Customer, UserKyc, Proposals
+from .models import Customer, UserKyc, Proposals, Wallet
 from datetime import datetime
 
 
@@ -61,5 +61,13 @@ class ProposalForm(forms.ModelForm):
 
     class Meta:
         model = Proposals
+        fields = '__all__'
+        exclude = ['user',]
+
+
+class WalletForm(forms.ModelForm):
+
+    class Meta:
+        model = Wallet
         fields = '__all__'
         exclude = ['user',]

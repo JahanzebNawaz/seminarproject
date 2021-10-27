@@ -1,0 +1,44 @@
+{% extends './dashboard.html' %}
+{% load static %}
+
+{% block body %}
+
+<!-- About section -->
+<section class="about-section spad">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-5 about-text">
+				<div class="widget-area">
+					<h4 class="widget-title">Buy Crypto					</h4>
+					<hr>
+					<h5>Current Balance: <b>{{mybalance}}</b></h5>
+					<form class="widget-subscribe-from" method="POST" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="row">
+							<div class="col-12">
+								<b>{{ form.currency.label_tag }}</b> <br>
+								{{ form.currency }}
+							</div>
+							<div class="col-12">
+								<b>{{ form.balance.label_tag }}</b> <br>
+								{{ form.balance }}
+
+							</div>
+							<div class="col-6">
+
+							</div>
+						</div>
+						
+						<button class="site-btn sb-full-- sb-gradients">Buy</button>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+</section>
+<!-- About section end -->
+
+{% endblock body %}
+	

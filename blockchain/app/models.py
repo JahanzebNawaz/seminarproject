@@ -112,6 +112,7 @@ class Customer(BaseModel):
     cardNumber = RegexValidator(regex = r"^[0-9]{14}$")
     credit_card = models.CharField(max_length=14, validators=[cardNumber],  null=True, blank=True)
     is_verified = models.BooleanField(default=False)
+    balance = models.DecimalField(max_digits=6, decimal_places=2, default=00)
     
     # profile_image = models.ImageField(
     #                     upload_to=upload_profile,
@@ -149,7 +150,7 @@ class Wallet(BaseModel):
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wallet_user', verbose_name='User')
     currency = models.ForeignKey(Currencies, on_delete=models.CASCADE, related_name='wallet_currency', verbose_name='Currency')
-    balance = models.PositiveBigIntegerField(default=0)
+    balance = models.PositiveBigIntegerField(default=0, verbose_name='Total Purchase Quantity')
 
 
     class Meta:

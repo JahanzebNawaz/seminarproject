@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, get_user, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.views import View
-from .forms import SignUpForm, UserProfileForm, UserKycForm, ProposalForm, CustomerForm
+from .forms import SignUpForm, UserProfileForm, UserKycForm, ProposalForm, CustomerForm, WalletForm
 from django.contrib.auth.models import auth
 from django.contrib.auth import get_user_model
 from django.forms.models import model_to_dict
@@ -79,10 +79,11 @@ def get_user_id(request):
     return request.user.id
 
 
+
 def dashboard(request):
     template_name = 'website/dashboard.html'
     context = {}
-    return redirect('website:profile')
+    return redirect('website:cryptos')
     # return render(request, template_name, context)
 
 def about(request):
@@ -352,3 +353,74 @@ def watchlist(request, pk=None):
     }
     return render(request, template_name, context)
 
+
+
+def purchase(request, pk=None): 
+    template_name = 'website/purchase.html'   
+    user = request.user.id
+    currency = Currencies.objects.get(pk=pk)
+    customer_obj = Customer.objects.get(user=user)
+
+    data = {
+        'currency': currency,
+        'balance': '0'
+    }
+    form = WalletForm(initial=data)
+
+    context = {
+        'form': form,
+        'mybalance': customer_obj.balance
+    }
+
+    admin = Customer.objects.filter(user__is_superuser=True).last()
+    print(admin)
+    print(admin.balance)
+    if request.POST:
+        form = WalletForm(request.POST)
+        user = User.objects.get(pk=request.user.pk)
+        form.instance.user = request.user
+        context['form'] = form
+        if form.is_valid():
+            obj = form.save(commit=False)
+            amount = form.instance.balance * currency.rate
+            currency.remaining_amount = currency.total_amount - amount
+            currency.save()
+            customer_obj.balance -= amount
+            customer_obj.save()
+            admin.balance += amount
+            admin.save()
+            obj.save()
+            messages.success(request, 'Successfully Purchases!')
+            # return redirect('website:cryptos')
+        
+    return render(request, template_name, context)
+
+
+
+# class PurchaseView(View):
+#     # base instead of signup. singup is included in base with if condition.
+#     template_name = 'website/purchase.html'
+#     form_class = WalletForm
+
+#     def get(self, request, *args, **kwargs):
+#         form = self.form_class()
+#         context = {
+#             'form': form
+#         }
+#         return render(request, self.template_name, context)
+
+#     def post(self, request, *args, **kwargs):
+#         user = get_object_or_404(User, pk=request.user.id)
+#         form = self.form_class(request.POST, request.FILES)
+#         form.instance.user = request.user
+#         context = {
+#             'form': form
+#         }
+#         if form.is_valid():
+#             obj = form.save(commit=False)
+#             obj.user = user
+#             obj.save()
+#             messages.success(request, 'Successfully submitted!')
+#             return redirect('website:proposal')
+#         messages.error(request, f'{form.errors}')
+#         return render(request, self.template_name, context)

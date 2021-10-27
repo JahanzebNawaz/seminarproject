@@ -30,12 +30,12 @@
 								{% endif %} -->
 							</div>
 							
+							<div class="col-12">
+								<!-- <input type="text" placeholder="Enter your email"> -->
+								<b>{{ form.kyc_documents.label_tag }}</b>
+								{{ form.kyc_documents }}
+							</div>
 							{% if not kyc %}
-								<div class="col-12">
-									<!-- <input type="text" placeholder="Enter your email"> -->
-									<b>{{ form.kyc_documents.label_tag }}</b>
-									{{ form.kyc_documents }}
-								</div>
 								
 							{% endif %}
 
